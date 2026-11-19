@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Cortex Realm challenge</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { --ground: #F4F6FA; --surface: #FFFFFF; --rule: #D8DEE9; --text: #0B1431; --dim: #46506E; --brand: #1E1A4D; --on-brand: #FFFFFF; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ground: #0A1128; --surface: #111A38; --rule: #1F2A4D; --text: #EEF2FF; --dim: #A9B3D1; --brand: #EEF2FF; --on-brand: #0A1128; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--text);
+         font: 17px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; }
+  main { max-width: 480px; margin: 0 auto; padding: 48px 16px; }
+  .kicker { font-size: 13px; font-weight: 700; color: var(--dim); text-transform: uppercase; letter-spacing: .04em; }
+  h1 { font-size: 30px; line-height: 1.15; margin: 8px 0 4px; }
+  .level { color: var(--dim); font-weight: 600; margin: 0 0 24px; }
+  .score { background: var(--surface); border: 1px solid var(--rule); padding: 16px; margin-bottom: 24px; }
+  .score b { display: block; font-size: 56px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .score span { color: var(--dim); font-weight: 600; }
+  a.press { display: block; text-align: center; text-decoration: none; font-weight: 800; padding: 15px; margin-bottom: 12px; }
+  a.primary { background: var(--brand); color: var(--on-brand); }
+  a.secondary { border: 1px solid var(--rule); color: var(--text); }
+  p.note { color: var(--dim); font-size: 14px; }
+  [hidden] { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker">Cortex Realm · a challenge</div>
+  <h1 id="who">A friend challenged you</h1>
+  <p class="level" id="level">The same run, your go.</p>
+  <div class="score" id="scoreBox" hidden><b id="score"></b><span id="scoreLabel"></span></div>
+  <a class="press primary" id="open" href="#">Open in the app</a>
+  <!-- Set this to the App Store page once the app has one. -->
+  <a class="press secondary" id="store" href="https://apps.apple.com/">Get the app</a>
+  <p class="note">Both of you play the identical run, whenever you like. The higher score wins. No account needed.</p>
+</main>
+<script>
+  // Everything from the link is untrusted: it is shown with textContent only, never as HTML.
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var games = { ballpark: ["Ballpark", "Round"], switchboard: ["Switchboard", "Shift"], drover: ["Drover", "Run"] };
+    var g = games[q.get("g")] ;
+    var name = (q.get("n") || "").replace(/[\u0000-\u001f]/g, "").trim().slice(0, 20) || "A friend";
+    var level = parseInt(q.get("l"), 10);
+    var score = parseInt(q.get("s"), 10);
+    document.getElementById("who").textContent = name + " challenged you";
+    if (g && level > 0) document.getElementById("level").textContent = g[0] + " · " + g[1] + " " + level + ". The same run, your go.";
+    if (score >= 0 && score <= 1000000) {
+      document.getElementById("score").textContent = String(score);
+      document.getElementById("scoreLabel").textContent = name + "'s score";
+      document.getElementById("scoreBox").hidden = false;
+    }
+    // The app's own scheme, for a phone that has the app but opened this page anyway.
+    document.getElementById("open").href = "cortexrealm://duel" + location.search;
+  })();
+</script>
+</body>
+</html>

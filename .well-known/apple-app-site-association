@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["5DJ5Q92BKC.we.cortex-realm"],
+        "components": [
+          { "/": "/d", "comment": "A duel link: /d?g=<game>&l=<level>&s=<score>&n=<name>&v=<build>" },
+          { "/": "/d/*" }
+        ]
+      }
+    ]
+  }
+}
